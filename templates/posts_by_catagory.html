@@ -6,7 +6,7 @@
 {% block content %}
    
 
-    <!-- Start Featured -->posts
+    <!-- Start Featured -->
      <h3 class="text-uppercase text-warning" style="letter-spacing: 2px;"> Category - {{category_id}} </h3>
   <div class="row mb-2">
     {% if posts %}
@@ -14,7 +14,7 @@
     <div class="col-md-6">
       <div class="card border-0" >
         <div class="card-body">
-          <h3>{{post.title}}</h3>
+          <h3><a href="{% url 'blog_post' post.slug %}">{{post.title}}</a></h3>
           <small class="mb-1 text-muted">{{post.updated_at | timesince}} ago | {{post.author}}</small>
           <p class="card-text">{{post.short_description|truncatewords:10}}</p>
         </div>
