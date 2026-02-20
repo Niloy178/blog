@@ -1,0 +1,43 @@
+{% extends  'base.html' %}
+{% block content %}
+
+
+<div class="row">
+    <!-- Left Side Bar -->
+    {% include 'dashboard/sidebar.html' %}
+
+    <!-- Right Side Content -->
+    <div class="col-md-9">
+            <div class="row">
+                <!-- All categories card -->
+                <div class="col">
+                    <div class="card border-default mb-3">
+                        <div class="card-header text-center text-uppercase font-weight-bold">
+                            All Categories
+                        </div>
+                        <div class="card-body text-dark">
+                            <h5 class="card-title text-center">
+                                {{catagory_count}}
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                <!-- All posts card -->
+                 <div class="col">
+                    <div class="card border-default mb-3">
+                        <div class="card-header text-center text-uppercase font-weight-bold">
+                            All Posts
+                        </div>
+                        <div class="card-body text-dark">
+                            <h5 class="card-title text-center">
+                                {{post_count}}
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div> 
+</div>
+
+
+{% endblock %}
