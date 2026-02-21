@@ -1,8 +1,8 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from blogs.models import Category, Blog
 from django.contrib.auth.decorators import login_required
-from .forms import CategoryForm
-
+from .forms import CategoryForm, BlogPostForm
+from django.template.defaultfilters import slugify
 
 # Create your views here.
 
@@ -52,5 +52,63 @@ def edit_category(req, id):
 
 #  Delete category
 def delete_category(req, id):
-    category = get_object_or_404(Category, id=id).delete()
+    category = get_object_or_404(Category, id=id)
+    category.delete()
     return redirect('categories')
+
+
+#Post CRUD Operations
+# Posts
+def posts(req):
+    posts = Blog.objects.all()
+    context = {
+        'posts': posts
+    }
+    return render(req, 'dashboard/posts.html', context)
+
+# Add Post
+def add_post(req):
+    if req.method == 'POST':
+        form = BlogPostForm(req.POST, req.FILES)
+        if form.is_valid():
+            post = form.save(commit=False) #It will save temporury but not int db --
+            post.author = req.user
+            post.save() # We need to save it to get the post.id
+            # slug = post.title.replace(' ', '-')
+            title = form.cleaned_data['title']
+            post.slug=slugify(title)+'-'+str(post.id) 
+            post.save()
+            return redirect('posts')
+
+    form = BlogPostForm()
+    context = {
+        'form': form
+    }
+    return render(req, 'dashboard/add_post.html', context)
+
+
+# Edit Post
+def edit_post(req, id):
+    post = get_object_or_404(Blog, id=id)
+    if(req.method == 'POST'):
+        form = BlogPostForm(req.POST, req.FILES, instance=post)
+        if form.is_valid():
+            post = form.save()
+            title = form.cleaned_data['title']
+            post.slug = slugify(title)+'-'+str(post.id)
+            post.save()
+            return redirect('posts')
+    
+    form = BlogPostForm(instance=post)
+    
+    context = {
+        'form': form
+    }
+    return render(req, 'dashboard/edit_post.html', context)
+
+# delete Post 
+def delete_post(req, id):
+    post = get_object_or_404(Blog, id=id)
+    post.delete()
+    return redirect('posts')
+    
