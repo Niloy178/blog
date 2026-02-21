@@ -18,10 +18,12 @@ def dashboard(req):
     }
     return render(req, 'dashboard/dashboard.html', context)
 
+@login_required(login_url='login')
 def categories(req):
     return render(req, 'dashboard/categories.html')
 
 # Add category
+@login_required(login_url='login')
 def add_category(req):
     if req.method == 'POST':
         form = CategoryForm(req.POST)
@@ -36,6 +38,7 @@ def add_category(req):
     return render(req, 'dashboard/add_category.html', context)
 
 # Edit Category
+@login_required(login_url='login')
 def edit_category(req, id):
     category = get_object_or_404(Category, id=id)
     if req.method == 'POST':
@@ -51,6 +54,7 @@ def edit_category(req, id):
     return render(req, 'dashboard/edit_category.html', context)
 
 #  Delete category
+@login_required(login_url='login')
 def delete_category(req, id):
     category = get_object_or_404(Category, id=id)
     category.delete()
@@ -59,6 +63,7 @@ def delete_category(req, id):
 
 #Post CRUD Operations
 # Posts
+@login_required(login_url='login')
 def posts(req):
     posts = Blog.objects.all()
     context = {
@@ -67,6 +72,7 @@ def posts(req):
     return render(req, 'dashboard/posts.html', context)
 
 # Add Post
+@login_required(login_url='login')
 def add_post(req):
     if req.method == 'POST':
         form = BlogPostForm(req.POST, req.FILES)
@@ -88,6 +94,7 @@ def add_post(req):
 
 
 # Edit Post
+@login_required(login_url='login')
 def edit_post(req, id):
     post = get_object_or_404(Blog, id=id)
     if(req.method == 'POST'):
@@ -107,6 +114,7 @@ def edit_post(req, id):
     return render(req, 'dashboard/edit_post.html', context)
 
 # delete Post 
+@login_required(login_url='login')
 def delete_post(req, id):
     post = get_object_or_404(Blog, id=id)
     post.delete()
@@ -114,13 +122,16 @@ def delete_post(req, id):
     
 
 # Users 
+@login_required(login_url='login')
 def users(req):
     users = User.objects.all()
     context = {
         'users': users,
     }
     return render(req, 'dashboard/users.html', context)
-from django.http import HttpResponse
+
+
+@login_required(login_url='login')
 def add(req):
     if req.method == 'POST':
         form = UserForm(req.POST)
@@ -134,12 +145,13 @@ def add(req):
     }
     return render(req, 'dashboard/add_user.html', context)
 
-
+@login_required(login_url='login')
 def delete_user(req, id):
     user = get_object_or_404(User, id=id)
     user.delete()
     return redirect('users')
 
+@login_required(login_url='login')
 def edit(req, id):
     user = get_object_or_404(User, id=id)
     if req.method == 'POST':
